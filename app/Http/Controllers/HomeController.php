@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use DB;
+use Validator;
+use Redirect;
+use Session;
+use Lang;
 class HomeController extends Controller
 {
     /**
@@ -29,6 +33,11 @@ class HomeController extends Controller
     {   
         return view('template/admin/pages/admin_view');
     }
+    public function userProfile (){
+        $id = Auth::user()->id;
+        $users = DB::table('users')->where('id',$id)->get();
+        return view('template/admin/pages/profile',['users' => $users]);
+    }
 
     /**
      * loading for updating user profile
@@ -38,16 +47,33 @@ class HomeController extends Controller
      * @return: \Illuminate\Http\Response
      * @author:mukul jain
      */
-    public function userProfile(){
-        $id = Auth::user()->id;
-        if(Input::hasFile('file')){
-            $file=Input::file('file');
-            $file->move('uploads', $file->getClientOriginalName());
+    public function userProfileOut(){
+        $allDetail=Auth::user();
+        $userName=$_POST['name'];
+        $email=$_POST['email'];
+        /*********check validation*************/
+        $validator = Validator::make(Input::all(),
+           ['name' => 'required|min:5','email'=>'required']
+        );
+        if ($validator->fails()){
+            return Redirect::to('userProfile')->withErrors($validator->errors());
+        }else{
+            /***for uploading image***/
+            $id = Auth::user()->id;
+            if(Input::hasFile('file')){
+                $file=Input::file('file');
+                $file->move('uploads', $file->getClientOriginalName());
+                $filename=$file->getClientOriginalName();
+               
+            }else{
+                $filename=Auth::user()->image;
+            }
             DB::table('users')
-                ->where('id', $id)
-                ->update(['image' => $file->getClientOriginalName()]);
+               ->where('id', $id)
+               ->update(['image' =>$filename,'name'=>$userName,'email'=>$email]);
         }
-        return view('template/admin/pages/profile');
+        Session::flash('success', Lang::get('user.profileUpdate')); 
+        return Redirect::to('userProfile');
     }
 
 
@@ -60,4 +86,4 @@ class HomeController extends Controller
             $m->to($user->email, $user->name)->subject('Verify Email');
         });die;
     }
-}
+}//MAIN CLASS END

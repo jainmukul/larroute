@@ -26,6 +26,7 @@
         <li class="header">MAIN NAVIGATION</li>
      
         <li><a href="{{url('home')}}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+        <li><a href="{{url('nerds')}}"><i class="fa fa-users"></i> <span>Users</span></a></li>
         <li class="active treeview">
           <!-- <a href="{{url('home')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>

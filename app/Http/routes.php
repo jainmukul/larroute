@@ -12,8 +12,7 @@
 */
 
 Route::get('/', function () {
-	//echo "<pre>";print_r(view('welcome'));die;
-   return view('template/login/pages/login_view');
+	return view('template/login/pages/login_view');
 });
 
 Route::auth();
@@ -30,8 +29,15 @@ $this->post('register', 'Auth\AuthController@register');
 $this->get('password/reset/{token?}', 'Auth\PasswordController@showResetForm');
 $this->post('password/email', 'Auth\PasswordController@sendResetLinkEmail');
 $this->post('password/reset', 'Auth\PasswordController@reset');
-$this->post('userProfile','HomeController@userProfile');
+$this->get('userProfile','HomeController@userProfile');
+$this->post('userProfile','HomeController@userProfileOut');
 
+
+/********Route for nerd controller***********/
+Route::resource('nerds','NerdController');
+Route::get('edit/{id}','NerdController@addEditUsers');
+/******************************/
+/*********end route for nerd controller*****/
 Route::get('admin_path', function () {
 	return view('template/login/pages/login_view');
 });
@@ -40,3 +46,4 @@ Route::get('profile',function(){
 	return view('template/admin/pages/profile');
 });
 Route::get('sendMail','HomeController@sendMail');
+

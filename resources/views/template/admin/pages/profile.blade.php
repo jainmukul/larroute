@@ -1,9 +1,10 @@
  @extends('template/admin/layout/master')
+
  @section('content')
-
  <div class="content-wrapper">
-
+  
   <section class="content-header">
+
       <h1>
        Profile
         <small>Preview</small>
@@ -14,7 +15,7 @@
       </ol>
   </section>
  <section class="content">
-
+       @include('flash')
       <div class="row">
         <!-- left column -->
         <div class="col-md-12">
@@ -31,7 +32,7 @@
               <div class="box-body">
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input type="text" class="form-control" id="text" name="name" value="{{Auth::user()->name}}" placeholder="Enter Username">
+                  <input type="text" class="form-control" id="text" name="name" value="{{$users[0]->name}}" placeholder="Enter Username">
                     @if ($errors->has('name'))
                       <span class="help-block">
                           <strong>{{ $errors->first('name') }}</strong>
@@ -39,8 +40,8 @@
                     @endif
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                 <input id="email" type="email" class="form-control" name="email" value="{{Auth::user()->email}}" placeholder="Email">
+                  <label for="exampleInputEmail">Email address</label>
+                 <input id="email" type="email" class="form-control" name="email" value="{{$users[0]->email}}" placeholder="Email">
                     @if ($errors->has('email'))
                       <span class="help-block">
                           <strong>{{ $errors->first('email') }}</strong>
@@ -53,7 +54,7 @@
                   <input type="hidden" value="{{ csrf_token() }}" name="_token" >
                   <p class="help-block">Click here to upload profile image</p>
                 </div>
-                <img id="blah" src="{{asset('uploads/').'/'.Auth::user()->image}}" class="thumbnail img-responsive" height="200px" width="200px" >
+                <img id="blah" src="{{asset('uploads/').'/'.$users[0]->image}}" class="thumbnail img-responsive" height="200px" width="200px" >
               </div>
               <!-- /.box-body -->
 

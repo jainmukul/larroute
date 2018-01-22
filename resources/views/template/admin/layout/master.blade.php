@@ -17,6 +17,7 @@
 
      <!-- Yeild content-->
       @yield('content')
+      
    <!-- Yeild content end-->
   
   <footer class="main-footer">
